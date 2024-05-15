@@ -50,8 +50,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         max: 180,
         maxMessage:"L'email ne doit pas dépaser {{ limit }} caractères",
     )]
-    #[Assert\Email(
-        message: "L'email {{ value }} est invalied")]
+    #[Assert\Email(message: "L'email {{ value }} est invalied")]
     #[ORM\Column(length: 180)]
     private ?string $email = null;
 
@@ -76,6 +75,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         match: true,
         message: "Le mot de passe doit contentir au moins une lettre miniscule, majuscule, un chiffre et un caractère spécial.",
     )]
+    #[Assert\NotCompromisedPassword(message:'Votre mot de passe est facilement piratable! Veuillez en choisir un autre.')]
     #[ORM\Column]
     private ?string $password = null;
     
