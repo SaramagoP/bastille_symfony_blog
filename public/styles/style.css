@@ -1,0 +1,16 @@
+html, body {
+    height: 100%;
+}
+
+body {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+}
+
+header {
+    padding: 10px 0;
+}
+
+* {
+    font-family: "Merienda", cursive;
+}
