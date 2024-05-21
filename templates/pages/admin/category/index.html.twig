@@ -53,11 +53,11 @@
                         <td>{{category.slug}}</td>
                         <td>{{category.createdAt|format_datetime()}}</td>
                         <td>{{category.updatedAt|format_datetime()}}</td>
-                        <td class="d-flex justify-content-evenly ">
+                        <td class="d-flex justify-content-evenly">
                             <a href="{{path('admin_category_edit', {'id':category.id})}}" type="submit" class="btn btn-primary" value="Modifier">Modifier</a>
                             <form action="{{path('admin_category_delete', {'id':category.id})}}" method="post">
                                 <input type="hidden" name="_csrf_token" value="{{csrf_token('delete_category_'~category.id)}}">
-                                <input onclick="return confirm('Confirmer la suppression?')" type="submit" class="btn btn-primary btn-danger" value="Supprimer">
+                                <input onclick="return confirm('Confirmer la suppression?')" type="submit" class="btn btn-primary btn-danger mx-2" value="Supprimer">
                             </form>
                         </td>
                     </tr>
