@@ -9,21 +9,48 @@
 {% block main %}
     <h1 class="text-center my-3 display-5">Nouvel article<hr></h1>
 
-    {# <div class="container mt-5">
+    <div class="container mt-5">
         <div class="row">
-            <div class="col-md-4 mx-auto">
+            <div class="col-lg-9 mx-auto">
                 {{form_start(form)}}
                     <div class="mb-3">
-                        <label for="admin_post_form_name">Nom</label>
-                        <div class="text-danger">{{form_errors(form.name)}}</div>
-                        {{form_widget(form.name, {'attr':{'class':'form-control', 'autofocus':'autofocus'}})}}
+                        <label for="admin_post_form_title">Titre</label>
+                        <div class="text-danger">{{form_errors(form.title)}}</div>
+                        {{form_widget(form.title, {'attr':{'class':'form-control', 'autofocus':'autofocus'}})}}
                     </div>
                     <div class="mb-3">
-                        <input formnovalidate type="submit" class="btn btn-primary shadow" value="Créer">
+                        <label for="admin_post_form_category">Catégorie</label>
+                        <div class="text-danger">{{form_errors(form.category)}}</div>
+                        {{form_widget(form.category, {'attr':{'class':'form-control'}})}}
+                    </div>
+                    <div class="mb-3">
+                        <label for="admin_post_form_imageFile_file">Image</label>
+                        <div class="text-danger">{{form_errors(form.imageFile)}}</div>
+                        {{form_widget(form.imageFile, {'attr':{'class':'form-control'}})}}
+                    </div>
+                     <div class="mb-3">
+                        <label for="admin_post_form_content">Bonne rédaction</label>
+                        <div class="text-danger">{{form_errors(form.content)}}</div>
+                        {{ form_widget(form.content, {"id":"editor", "attr":{"class":"form-control", "rows":10}}) }}
+                    </div>
+                    <div class="my-3 d-flex justify-content-center align-items-center">
+                        <input formnovalidate type="submit" class="btn btn-primary shadow w-50" value="Sauvegarder">
                     </div>
                 {{form_end(form)}}
             </div>
         </div>
-    </div> #}
+    </div>
+
+{# Wysiwyg editor #}
+{% block ckEditor %}
+    <script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js"></script>
+    <script>
+        ClassicEditor
+            .create( document.querySelector( '#editor' ) )
+            .catch( error => {
+                console.error( error );
+            } );
+    </script>
+{% endblock %}
 
 {% endblock %}

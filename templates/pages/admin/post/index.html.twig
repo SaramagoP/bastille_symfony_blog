@@ -6,10 +6,84 @@
 
 {% block keywords %}admin, liste, articles{% endblock %}
 
+{# {% block jQuery %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+{% endblock %} #}
+
+{# {% block DataTables %}
+    <link href="https://cdn.datatables.net/v/bs5/dt-2.0.7/datatables.min.css" rel="stylesheet">
+    <script src="https://cdn.datatables.net/v/bs5/dt-2.0.7/datatables.min.js"></script>
+    <script>
+        $(document).ready( function () {
+            $('#Table').DataTable({
+                language: { 
+                    url: 'https://cdn.datatables.net/plug-ins/2.0.7/i18n/fr-FR.json'
+                },
+            })
+        } );
+    </script>
+{% endblock %} #}
+
 {% block main %}
     <h1 class="text-center my-3 display-5">Liste des Articles<hr></h1>
 
     <div class="d-flex justify-content-end align-items-center my-3">
         <a href="{{path('admin_post_create')}}" class="btn btn-primary shadow"><i class="fa-solid fa-plus"></i> Nouvel Article</a>
+    </div>
+
+    <div class="table-responsive">
+        <table id="Table" class="table table-hover text-center table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th>Id</th>
+                    <th>Image</th>
+                    <th>Titre</th>
+                    <th>Catégorie</th>
+                    <th>Publié?</th>
+                    <th>Le contenu</th>
+                    <th>Créé le</th>
+                    <th>Modifié le</th>
+                    <th>Options</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for post in posts %}
+                    <tr>
+                        <td>{{post.id}}</td>
+                        <td>
+                        {% if post.image %}
+                            <img src="{{ vich_uploader_asset(post, 'imageFile') | imagine_filter('admin_post') }}" alt="{{ post.title }}">
+                        {% else %}
+                            <span>---</span>
+                        {% endif %}
+                        </td>
+                        <td>{{post.title}}</td>
+                        <td>{{post.category.name}}</td>
+                        <td class="d-flex flex-column justify-centent-center align-items-center">
+                            {% if post.isPublished  %}
+                                <span>Publié le {{post.publishedAt|format_datetime()}}</span> 
+                            {% else %}
+                                <span>Pas encore</span>                       
+                            {% endif %}
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch">
+                            </div>
+                        </td>
+                        <td>
+                            <a href="" class="btn btn-sm btn-dark">Lire</a>
+                        </td>
+                        <td>{{post.createdAt|format_datetime()}}</td>
+                        <td>{{post.updatedAt|format_datetime()}}</td>
+                        <td>
+                            <a href="" type="submit" class="btn btn-secondary my-2" value="Modifier">Modifier</a>
+                            <form action="" method="post">
+                                <input type="hidden" name="_csrf_token" value="{{csrf_token('delete_post_'~post.id)}}">
+                                <input onclick="return confirm('Confirmer la suppression?')" type="submit" class="btn btn-primary btn-danger mx-2" value="Supprimer">
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 {% endblock %}
