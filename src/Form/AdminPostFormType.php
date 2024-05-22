@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\Tag;
 use App\Entity\Post;
 use App\Entity\Category;
 use Symfony\Component\Form\AbstractType;
@@ -24,6 +25,13 @@ class AdminPostFormType extends AbstractType
                 'multiple' => false, // pour avoir un select
                 'expanded' => false, // pour avoir un select
                 'placeholder' => "Choississez une catégorie"
+            ])
+            ->add('tags', EntityType::class, [
+                'class' => Tag::class,
+                'choice_label' => 'name',
+                'multiple' => true, 
+                'expanded' => false, 
+                'placeholder' => "Choississez un ou plusierus tags"
             ])
             ->add('imageFile', VichImageType::class, [
                 'required' => false,
