@@ -2,17 +2,17 @@
 
 namespace App\Entity;
 
-use App\Repository\CategoryRepository;
+use App\Repository\TagRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
-#[UniqueEntity('name', message: 'Cette catégorie existe déjà.')]
-#[ORM\Entity(repositoryClass: CategoryRepository::class)]
-class Category
+#[UniqueEntity('name', message: 'Ce tag existe déjà.')]
+#[ORM\Entity(repositoryClass: TagRepository::class)]
+class Tag
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -21,9 +21,9 @@ class Category
 
     #[Assert\Length(
         max: 255,
-        maxMessage: 'Le nom ne doit pas depasser de {{ limit }} caractères',
+        maxMessage: 'Le tag ne doit pas depasser de {{ limit }} caractères',
     )]
-    #[Assert\NotBlank(message: 'Le nom de la catégorie est obligatoire')]
+    #[Assert\NotBlank(message: 'Le nom du tag est obligatoire')]
     #[ORM\Column(length: 255, unique: true)]
     private ?string $name = null;
 
@@ -40,7 +40,7 @@ class Category
     /**
      * @var Collection<int, Post>
      */
-    #[ORM\OneToMany(targetEntity: Post::class, mappedBy: 'category', orphanRemoval: true)]
+    #[ORM\ManyToMany(targetEntity: Post::class, mappedBy: 'tags')]
     private Collection $posts;
 
     public function __construct()
@@ -113,7 +113,7 @@ class Category
     {
         if (!$this->posts->contains($post)) {
             $this->posts->add($post);
-            $post->setCategory($this);
+            $post->addTag($this);
         }
 
         return $this;
@@ -122,10 +122,7 @@ class Category
     public function removePost(Post $post): static
     {
         if ($this->posts->removeElement($post)) {
-            // set the owning side to null (unless already changed)
-            if ($post->getCategory() === $this) {
-                $post->setCategory(null);
-            }
+            $post->removeTag($this);
         }
 
         return $this;
