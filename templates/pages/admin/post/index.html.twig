@@ -6,11 +6,11 @@
 
 {% block keywords %}admin, liste, articles{% endblock %}
 
-{# {% block jQuery %}
+{% block jQuery %}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-{% endblock %} #}
+{% endblock %} 
 
-{# {% block DataTables %}
+{% block DataTables %}
     <link href="https://cdn.datatables.net/v/bs5/dt-2.0.7/datatables.min.css" rel="stylesheet">
     <script src="https://cdn.datatables.net/v/bs5/dt-2.0.7/datatables.min.js"></script>
     <script>
@@ -22,13 +22,15 @@
             })
         } );
     </script>
-{% endblock %} #}
+{% endblock %} 
 
 {% block main %}
     <h1 class="text-center my-3 display-5">Liste des Articles<hr></h1>
 
+    {% include 'components/_alert.html.twig' %}
+
     <div class="d-flex justify-content-end align-items-center my-3">
-        <a href="{{path('admin_post_create')}}" class="btn btn-primary shadow"><i class="fa-solid fa-plus"></i> Nouvel Article</a>
+        <a href="{{path('admin_post_create')}}" class="btn btn-secondary shadow"><i class="fa-solid fa-plus"></i> Nouvel Article</a>
     </div>
 
     <div class="table-responsive">
@@ -65,20 +67,24 @@
                             {% else %}
                                 <span>Pas encore</span>                       
                             {% endif %}
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" role="switch">
-                            </div>
+                            <form action="{{path('admin_post_publish', {'id':post.id})}}" method="POST">
+                                <input type="hidden" name="_csrf_token" value="{{csrf_token('publish_post_'~post.id)}}">
+                                <div class="form-check form-switch">
+                                    <input onclick="return confirm('Confirmer cette action?')" onChange="this.form.submit()" class="form-check-input" type="checkbox" role="switch" {{ post.isPublished ? 'checked' : '' }}>
+                                </div>
+                            </form> 
                         </td>
+                        <td>{{post.content}}</td>
                         <td>
-                            <a href="" class="btn btn-sm btn-dark">Lire</a>
+                            <a href="{{path('admin_post_show', {'id':post.id})}}" class="btn btn-sm btn-dark">Lire</a>
                         </td>
                         <td>{{post.createdAt|format_datetime()}}</td>
                         <td>{{post.updatedAt|format_datetime()}}</td>
-                        <td>
-                            <a href="" type="submit" class="btn btn-secondary my-2" value="Modifier">Modifier</a>
-                            <form action="" method="post">
+                        <td class="d-flex justify-content-evenly">
+                            <a href="{{path('admin_post_edit', {'id':post.id})}}" type="submit" class="btn btn-primary" value="Modifier">Modifier</a>
+                            <form action="{{path('admin_post_delete', {'id':post.id})}}" method="POST">
                                 <input type="hidden" name="_csrf_token" value="{{csrf_token('delete_post_'~post.id)}}">
-                                <input onclick="return confirm('Confirmer la suppression?')" type="submit" class="btn btn-primary btn-danger mx-2" value="Supprimer">
+                                  <input onclick="return confirm('En supprimant cette catégorie, vous supprimez également tous les articles qui lui sont associés. Vous confirmez?')" type="submit" class="btn btn-sm btn-danger mx-2" value="Supprimer">
                             </form>
                         </td>
                     </tr>
