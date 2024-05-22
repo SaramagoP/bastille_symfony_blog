@@ -100,10 +100,10 @@ class CategoryController extends AbstractController
             $this->em->remove($category);
 
             $this->em->flush();
-
+            
+            return $this->redirectToRoute('admin_category_index');
         }
 
-        return $this->redirectToRoute('admin_category_index');
 
     }
 }

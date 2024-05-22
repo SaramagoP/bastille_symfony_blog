@@ -57,10 +57,10 @@ class Post
     private ?string $image = null;
 
     #[Assert\NotBlank(message: "Le contenu est obligatoire")]
-    #[Assert\Length(
-        max: 500,
-        maxMessage: 'Le contenu ne peut pas contenir plus de {{ limit }} caractères',
-    )]
+    // #[Assert\Length(
+    //     max: 500,
+    //     maxMessage: 'Le contenu ne peut pas contenir plus de {{ limit }} caractères',
+    // )]
     #[ORM\Column(type: Types::TEXT)]
     private ?string $content = null;
 
