@@ -147,7 +147,7 @@ class PostController extends AbstractController
         //Vérifier s'il existe au moins une catégorie avant de continuer
         if ( \count($this->categoryRepository->findAll()) == 0 )
         {
-            $this->addFlash("warning", "Pour créer un article, vous devez d'abord créer au moins une catégorie");
+            $this->addFlash("warning", "Pour modifier un article, vous devez d'abord créer au moins une catégorie");
             return $this->redirectToRoute('admin_category_index');
         }
 
